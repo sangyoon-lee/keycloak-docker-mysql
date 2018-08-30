@@ -1,0 +1,12 @@
+# Myapp Databse (xa-data-source)
+/subsystem=datasources/xa-data-source=MyAppXADS: add(jndi-name=java:jboss/datasources/MyAppXADS,enabled=true,use-java-context=true,use-ccm=true,driver-name=mysql)
+/subsystem=datasources/xa-data-source=MyAppXADS/xa-datasource-properties=URL: add(value=jdbc:mysql://${env.APP_DB_ADDR:mysql}:${env.APP_DB_PORT:3306}/${env.APP_DB_DATABASE:keycloak}${env.APP_JDBC_PARAMS:})
+/subsystem=datasources/xa-data-source=MyAppXADS: write-attribute(name=user-name, value=${env.APP_DB_USER:myapp})
+/subsystem=datasources/xa-data-source=MyAppXADS: write-attribute(name=password, value=${env.APP_DB_PASSWORD:password})
+/subsystem=datasources/xa-data-source=MyAppXADS: write-attribute(name=min-pool-size, value=0)
+/subsystem=datasources/xa-data-source=MyAppXADS: write-attribute(name=initial-pool-size, value=0)
+/subsystem=datasources/xa-data-source=MyAppXADS: write-attribute(name=pool-prefill, value=false)
+
+# カスタムモジュールログ制御
+/subsystem=logging/logger=jp.openstandia.keycloak:add
+/subsystem=logging/logger=jp.openstandia.keycloak:write-attribute(name="level", value="${env.OPENSTANDIA_LOGLEVEL:DEBUG}") 

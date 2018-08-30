@@ -1,0 +1,37 @@
+version: '3'
+services:
+
+    keycloak:
+        build: ./keycloak
+        container_name: keycloak
+        ports:
+            - 8080:8080
+            - 9990:9990
+        depends_on:
+            - mysql-keycloak
+            - mysql-myapp
+        links:
+            - mysql-keycloak:mysql-keycloak
+            - mysql-myapp:mysql-myapp
+        env_file:
+            - ./env/keycloak.env
+    
+    mysql-keycloak:
+        build: ./mysql-keycloak
+        container_name: mysql-keycloak
+        ports:
+            - 13306:3306
+        volumes:
+            - /opt/volumes/mysql-keycloak:/var/lib/mysql
+        env_file:
+            - ./env/mysql-keycloak.env
+    
+    mysql-myapp:
+        build: ./mysql-myapp
+        container_name: mysql-myapp
+        ports:
+            - 23306:3306
+        volumes:
+            - /opt/volumes/mysql-myapp:/var/lib/mysql
+        env_file:
+            - ./env/mysql-myapp.env
